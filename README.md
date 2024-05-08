@@ -5,7 +5,7 @@
 </p>
 
 <!-- Title -->
-<h1 align="center"><b>DS102 - Statistical Machine Learning</b></h1>
+<h1 align="center"><b>CS313 - Data Mining</b></h1>
 
 
 
