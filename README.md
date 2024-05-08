@@ -32,10 +32,8 @@
 # IMAGE CLASSIFICATION FOR TOURIST DESTINATION IN VIET NAM
 ## Requirements
 > conda create --name datamining python=3.9
-> 
+
 > conda activate datamining
-> 
-> 
 
 ## Run project
 - **Dataset** Group created a new dataset(VietTravel). **Download dataset here !!! [DATASET](https://drive.google.com/drive/folders/1O1KdzM46Z0mLT4FcaCchjiG5txabLEls?usp=sharing)**
