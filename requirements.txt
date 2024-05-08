@@ -1,3 +1,8 @@
 streamlit
 langchain
 streamlit_cropper
+opencv-python
+torchvision
+tensorflow
+scikit-image
+joblib

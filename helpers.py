@@ -1,4 +1,3 @@
-from secret_key import openapi_key,serper_api_key, google_api_key,google_cse_id
 from langchain.llms import OpenAI
 from langchain.chat_models import ChatOpenAI
 
@@ -19,11 +18,6 @@ from langchain.document_transformers import DoctranTextTranslator
 from langchain.schema import Document
 from langchain.output_parsers import NumberedListOutputParser, CommaSeparatedListOutputParser, StructuredOutputParser, ResponseSchema
 from langchain.prompts.chat import ChatPromptTemplate,SystemMessagePromptTemplate, AIMessagePromptTemplate,HumanMessagePromptTemplate
-
-os.environ['OPENAI_API_KEY'] = openapi_key
-os.environ['SERPER_API_KEY'] = serper_api_key
-os.environ['GOOGLE_API_KEY'] = google_api_key
-os.environ['GOOGLE_CSE_ID'] = google_cse_id
 
 pretrained_model = tf.keras.applications.MobileNetV2(
     input_shape=(224, 224, 3),
