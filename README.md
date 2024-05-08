@@ -30,14 +30,16 @@
 ## Project
 <a name="project"></a>
 # IMAGE CLASSIFICATION FOR TOURIST DESTINATION IN VIET NAM
-## Requirements
+## Code
 > conda create --name datamining python=3.9
 
 > conda activate datamining
 
+> pip install -r requirements.txt
+ 
+> streamlit run project.py
+
 ## Run project
-- **Dataset** Group created a new dataset(VietTravel). **Download dataset here !!! [DATASET](https://drive.google.com/drive/folders/1O1KdzM46Z0mLT4FcaCchjiG5txabLEls?usp=sharing)**
-- In order to get suggest, you should enter your OpenAI key in folder **secret_key.py**
 - You should download weight of model file. After that, you add each model file to **pretrained** folder. 
 - **Download pre-trained models here !!! [Pre-trained Models](https://drive.google.com/drive/folders/1GJdh2ECYUcqNWYdKMLDfyDIbioH4S0Po?usp=sharing)**
 - **Run Streamlit:** streamlit run project.py
