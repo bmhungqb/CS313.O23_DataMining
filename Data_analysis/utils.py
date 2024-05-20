@@ -2,10 +2,11 @@ import pandas as pd
 from pandasai import Agent, SmartDataframe
 import google.generativeai as genai
 import os
+from secret_key import google_api_key, pandasai_api_key
 from helpers import label_index
 
-genai.configure(api_key="AIzaSyAfhYtk8Z6qzyGN3OJyYA1CwxXg5hL6DmU")
-os.environ["PANDASAI_API_KEY"] = "$2a$10$37YhBpiEm/0bAutuG8G/Tuh96KYbRm.JSkf3.Ty3Y4dbt4L9m8ID6"
+genai.configure(api_key=google_api_key)
+os.environ["PANDASAI_API_KEY"] = pandasai_api_key
 model = genai.GenerativeModel('gemini-1.0-pro-latest')
 def data_process(url):
     # Read the CSV file and set the index

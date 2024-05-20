@@ -5,16 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b2020bac-6ce4-41a9-9dce-847e294fd48b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Data_analysis/utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/helpers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/images_test/img_0_161.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/images_test/image/img_0_161.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/images_test/img_19_130.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/images_test/image/img_19_130.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/images_test/img_5_244.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/images_test/image/img_5_244.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/images_test/img_6_130.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/images_test/image/img_6_130.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project.py" beforeDir="false" afterPath="$PROJECT_DIR$/project.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Data_analysis/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/Data_analysis/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/secret_key.py" beforeDir="false" afterPath="$PROJECT_DIR$/secret_key.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
