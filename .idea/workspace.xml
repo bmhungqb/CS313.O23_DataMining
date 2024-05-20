@@ -5,8 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b2020bac-6ce4-41a9-9dce-847e294fd48b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Data_analysis/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/Data_analysis/utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/secret_key.py" beforeDir="false" afterPath="$PROJECT_DIR$/secret_key.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/helpers.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

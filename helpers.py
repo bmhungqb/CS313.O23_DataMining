@@ -5,9 +5,7 @@ import torchvision
 from torchvision import transforms
 import torch.nn as nn
 
-os.environ['OPENAI_API_KEY'] = 'sk-proj-AzokoANVUeddZTtLVTlET3BlbkFJV0QXYkqQl5yybJOmlrxr'
-data_dir = ''
-test_path = os.path.join(data_dir, 'images_test')
+test_path = os.path.join('', 'images_test')
 transform = transforms.Compose([
     transforms.Resize(256),
     transforms.CenterCrop(224),
@@ -16,8 +14,7 @@ transform = transforms.Compose([
 ])
 
 model = torchvision.models.mobilenet_v2()
-num_ftrs = model.classifier[1].in_features
-model.classifier[1] = nn.Linear(num_ftrs, 31)
+model.classifier[1] = nn.Linear(model.classifier[1].in_features, 31)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # Send model to device
 model = model.to(device)
