@@ -1,197 +1,161 @@
-from langchain.llms import OpenAI
-from langchain.chat_models import ChatOpenAI
-
-from langchain.prompts import PromptTemplate
-from langchain.chains import LLMChain, SimpleSequentialChain, SequentialChain
-from tensorflow.keras.preprocessing.image import load_img, img_to_array
-from langchain.agents import AgentType, initialize_agent, load_tools
 import os
-import pickle
-import cv2
-from PIL import Image
-import numpy as np
-from skimage import feature
-import tensorflow as tf
-import time
-import streamlit as st
-from langchain.document_transformers import DoctranTextTranslator
-from langchain.schema import Document
-from langchain.output_parsers import NumberedListOutputParser, CommaSeparatedListOutputParser, StructuredOutputParser, ResponseSchema
-from langchain.prompts.chat import ChatPromptTemplate,SystemMessagePromptTemplate, AIMessagePromptTemplate,HumanMessagePromptTemplate
+import torch.nn.functional as F
+import torch
+import torchvision
+from torchvision import transforms
+import torch.nn as nn
 
-pretrained_model = tf.keras.applications.MobileNetV2(
-    input_shape=(224, 224, 3),
-    include_top=False,
-    weights='imagenet', 
-    pooling='avg'
-)
-pretrained_model.trainable = False
+os.environ['OPENAI_API_KEY'] = 'sk-proj-AzokoANVUeddZTtLVTlET3BlbkFJV0QXYkqQl5yybJOmlrxr'
+data_dir = ''
+test_path = os.path.join(data_dir, 'images_test')
+transform = transforms.Compose([
+    transforms.Resize(256),
+    transforms.CenterCrop(224),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+])
 
-inputs = pretrained_model.input
+model = torchvision.models.mobilenet_v2()
+num_ftrs = model.classifier[1].in_features
+model.classifier[1] = nn.Linear(num_ftrs, 31)
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+# Send model to device
+model = model.to(device)
+model.load_state_dict(torch.load('pretrained/weight_5.pth', map_location=torch.device(device)))
+model.eval()
 
-x = tf.keras.layers.Dense(128, activation='relu')(pretrained_model.output)
-x = tf.keras.layers.Dense(128, activation='relu')(x)
-
-outputs = tf.keras.layers.Dense(20, activation='softmax')(x)
-
-model = tf.keras.Model(inputs=inputs, outputs=outputs)
-
-model.load_weights('pretrained/MB_Model.h5')
 
 def get_full_place(place):
     destination = {
-    "thành phố Hồ Chí Minh":["Dinh Độc Lập","Chợ Bến thành","Nhà thờ Đức Bà","Bưu điện trung tâm"] ,
-    "tỉnh Bà Rịa Vũng Tàu": ["Tượng Chúa Giang Tay Vũng Tàu"],
-    "tỉnh Phú Yên": ['Gành đá đĩa'],
-    "thành phố Đà Nẵng": ["Cầu vàng bà nà hills"],
-    "thành phố Hà Nội": ["Lăng Bác Hồ","Hồ Gươm","Nhà Thờ Lớn"],
-    "tỉnh Thừa Thiên-Huế": ["Kinh Thành Huế"],
-    "tỉnh Quảng Ninh": ["Vịnh Hạ Long"],
-    "tỉnh Quảng Nam": ["Thánh Địa Mỹ Sơn","Phố Cổ Hội An"],
-    "tỉnh Hà Giang": ["Cột cờ Lũng Cú"],
-    "tỉnh Quảng Bình": ["Động Phong nha kẻ bàng"],
-    "tỉnh Cao Bằng": ["thác Bản Giốc"],
-    "tỉnh Lâm Đồng": ["Ga Đà Lạt"],
-    "thành phố Cần Thơ": ["Chợ Nổi"],
-    "tỉnh Ninh Bình": ["Tràng An Ninh Bình"]
+        "thành phố Hồ Chí Minh": ["Bảo tàng Chứng tích Chiến tranh", "Chợ Bến Thành", "Nhà thờ Đức Bà",
+                                  "Bảo tàng Mĩ thuật", "Bitexco", "Bưu điện Thành phố Hồ Chí Minh",
+                                  "Chùa Bửu Long", "Crescent Mall", "Landmark 81",
+                                  "Ủy ban Nhân dân Thành phố Hồ Chí Minh", "Emart Sala",
+                                  "Hồ con rùa", "Nhà thờ Giáo sứ Tân Định", "Bến Nhà Rồng", "Dinh Độc lập",
+                                  "Chùa Vĩnh Nghiêm"],
+        "thành phố Đà Nẵng": ["Cầu Rồng", "Cầu Vàng"],
+        "thành phố Hà Nội": ["Lăng Chủ tịch Hồ Chí Minh", "Bảo tàng Hồ Chí Minh Hà Nội", "Nhà thờ Lớn Hà Nội",
+                             "Chùa Một cột", "Chùa Trấn Quốc", "Hoàng thành Thăng Long", "Nhà hát lớn Hà Nội"],
+        "tỉnh Thừa Thiên-Huế": ["Chùa Thiên Mụ", "Kinh Thành Huế"],
+        "tỉnh Khánh Hòa": ["Chùa Long Sơn", "Tháp bà Ponagar"],
+        "tỉnh Quảng Nam": ["Thánh Địa Mỹ Sơn"],
+        "tỉnh Lâm Đồng": ["Quảng trường Lâm Viên"]
     }
     temp = [key for key, value in destination.items() if place in value][0]
     return place + ", " + temp
 
+def predict(img):
+    img = transform(img)
+    img = img.unsqueeze(0).to(device)
+    with torch.no_grad():
+        output = model(img)
+        predicted_probabilities = F.softmax(output, dim=1)
+        confidence_score, predicted_label = torch.max(predicted_probabilities, 1)
+        predicted_label = predicted_label.item()
 
-def prompt(task,lang,place, option = None):
-
-    province = place.split(",")[1][1:]
-    print(province)
-    if task == "des":
-        sys_template = 'Generate a short description approximately 100 words of a destination in Vietnam translated in {lang} language.'
-    elif task == "list": 
-        if option == "restaurant":
-            sys_template = "Please provide a list of 5 {option}s located in a destination, Vietnam, along with their respective addresses."
-        else:
-            sys_template = "Please provide a list of 5 {option}s located near a destination, Vietnam, along with their respective addresses."
-
-
-    
-
-    system_message_prompt = SystemMessagePromptTemplate.from_template(sys_template)
-    
-    human_template="{text}"
-    human_message_prompt = HumanMessagePromptTemplate.from_template(human_template)
-    chat_prompt = ChatPromptTemplate.from_messages([system_message_prompt, human_message_prompt])
-    chat = ChatOpenAI(model_name="gpt-3.5-turbo",temperature=0)
-    
-    if task == "des":
-        result = chat(chat_prompt.format_prompt(lang = lang,text = place).to_messages()).content
-
-    elif task == "list": 
-        if option == "hotel":
-            result = chat(chat_prompt.format_prompt( option = option,text = place).to_messages()).content
-
-        else:
-            result = chat(chat_prompt.format_prompt( option = option,text = province).to_messages()).content
-        
-    
-    
-
-        
-    print("result: ",result)
-    return result
-    
-@st.cache_data
-def generate_describle(place, language):
-
-    result = prompt("des",language,place)
-    return result
-
-
-@st.cache_data
-def generate_service_info(option, name, language):
-    if option == 'hotel':
-        result = prompt("list",language,name,option)
-
-    elif option == 'restaurant':
-        result = prompt("list",language,name,option)
-        
-
-    print("option ", option)
-        
-    print(result)
-    return result
-def TinhHog(img):
-  (hog, hog_image) = feature.hog(img, orientations=9,pixels_per_cell=(6, 6), cells_per_block=(3, 3),block_norm='L2-Hys', visualize=True, transform_sqrt=True)
-
-  return hog
-
-def predict_y(img):
-    img_arr = np.array(img)
-    img_gray = cv2.cvtColor(img_arr, cv2.COLOR_RGB2GRAY)
-    img1 = cv2.resize(img_gray, (100, 100))
-    hog = TinhHog(img1)
-    hog = hog.reshape(1,-1)
-    y = model.predict(hog)
-
-    return int(y[0])
-
-def output(img):
-    # img=load_img(location,target_size=(224,224,3))
-    img_arr = np.array(img)
-    img = cv2.cvtColor(img_arr, cv2.COLOR_RGB2BGR)
-    img1 = cv2.resize(img, (224,224))
-    img=img_to_array(img1)
-    img=img/255
-    img=np.expand_dims(img,[0])
-    answer=model.predict(img)
-    y_class = answer.argmax(axis=-1)
-    label = map_to_id[y_class[0]]
-    place = label_map[label]
-
-    return place
-
+    # Get the label names
+    predicted_label_id = map_to_id[predicted_label]
+    predicted_label_name = label_map[predicted_label_id]
+    return predicted_label_name
 
 
 map_to_id = {
-    0 : 0,
-    1 : 1,
-    2 : 10,
-    3 : 11,
-    4 : 12,
-    5 : 13,
-    6 : 14,
-    7 : 15,
-    8 : 16,
-    9 : 17,
-    10: 18,
-    11: 19,
-    12: 2,
-    13: 3,
-    14: 4,
-    15: 5,
-    16: 6,
-    17: 7,
-    18: 8,
-    19: 9
+    0: 1,
+    1: 10,
+    2: 11,
+    3: 12,
+    4: 13,
+    5: 14,
+    6: 15,
+    7: 16,
+    8: 17,
+    9: 18,
+    10: 19,
+    11: 2,
+    12: 20,
+    13: 21,
+    14: 22,
+    15: 23,
+    16: 24,
+    17: 25,
+    18: 26,
+    19: 27,
+    20: 27,
+    21: 27,
+    22: 3,
+    23: 30,
+    24: 31,
+    25: 4,
+    26: 5,
+    27: 6,
+    28: 7,
+    29: 8,
+    30: 9
 }
 
 label_map = {
-    0 : 'Lăng Bác Hồ',
-    1 : 'Tràng An Ninh Bình',
-    2 : 'Kinh Thành Huế',
-    3 : 'Nhà thờ Đức Bà',
-    4 : 'Vịnh Hạ Long',
-    5 : 'Dinh Độc Lập',
-    6 : 'Thánh Địa Mỹ Sơn',
-    7 : 'Hồ Gươm',
-    8 : 'Bưu điện trung tâm',
-    9 : 'Tượng Chúa Giang Tay Vũng Tàu',
-    10: 'Cầu vàng bà nà hills',
-    11: 'Cột cờ Lũng Cú',
-    12: 'Động Phong nha kẻ bàng',
-    13: 'Phố Cổ Hội An',
-    14: 'thác Bản Giốc',
-    15: 'Nhà Thờ Lớn',
-    16: 'Chợ Bến thành',
-    17: 'Ga Đà Lạt',
-    18: 'Chợ Nổi',
-    19: 'Gành đá đĩa'
+    1: 'Bảo tàng Chứng tích Chiến tranh',  #
+    2: 'Bảo tàng Hồ Chí Minh Hà Nội',  #
+    3: 'Bảo tàng Mĩ thuật',  #
+    4: 'Bến Nhà Rồng',  #
+    5: 'Bitexco',  #
+    6: 'Bưu điện Thành phố Hồ Chí Minh',  #
+    7: 'Cầu Rồng',  #
+    8: 'Cầu Vàng',  #
+    9: 'Chợ Bến Thành',  #
+    10: 'Chùa Bửu Long',  #
+    11: 'Chùa Long Sơn',  #
+    12: 'Chùa Một cột',  #
+    13: 'Chùa Thiên Mụ',  #
+    14: 'Chùa Trấn Quốc',  #
+    15: 'Chùa Vĩnh Nghiêm',  #
+    16: 'Cresent Mall',  #
+    17: 'Dinh Độc lâp',  #
+    18: 'Emart Sala',  #
+    19: 'Hồ con rùa',  #
+    20: 'Hoàng thành Thăng Long',  #
+    21: 'Kinh Thành Huế',  #
+    22: 'Landmark81',  #
+    23: 'Lăng Chủ tịch Hồ Chí Minh',  #
+    24: 'Thánh địa Mỹ Sơn',  #
+    25: 'Nhà hát lớn Hà Nội',  #
+    26: 'Nhà thờ Đức Bà',  #
+    27: 'Nhà thờ Giáo sứ Tân Định',  #
+    28: 'Nhà thờ Lớn Hà Nội',  #
+    29: 'Quảng trường Lâm Viên',  #
+    30: 'Tháp bà Ponagar',  #
+    31: 'Ủy ban Nhân dân Thành phố Hồ Chí Minh'  #
+}
+label_index = {
+    'Bảo tàng Chứng tích Chiến tranh': 1,
+    'Bảo tàng Hồ Chí Minh Hà Nội': 2,
+    'Bảo tàng Mĩ thuật': 3,
+    'Bến Nhà Rồng': 4,
+    'Bitexco': 5,
+    'Bưu điện Thành phố Hồ Chí Minh': 6,
+    'Cầu Rồng': 7,
+    'Cầu Vàng': 8,
+    'Chợ Bến Thành': 9,
+    'Chùa Bửu Long': 10,
+    'Chùa Long Sơn': 11,
+    'Chùa Một cột': 12,
+    'Chùa Thiên Mụ': 13,
+    'Chùa Trấn Quốc': 14,
+    'Chùa Vĩnh Nghiêm': 15,
+    'Cresent Mall': 16,
+    'Dinh Độc lâp': 17,
+    'Emart Sala': 18,
+    'Hồ con rùa': 19,
+    'Hoàng thành Thăng Long': 20,
+    'Kinh Thành Huế': 21,
+    'Landmark81': 22,
+    'Lăng Chủ tịch Hồ Chí Minh': 23,
+    'Thánh địa Mỹ Sơn': 24,
+    'Nhà hát lớn Hà Nội': 25,
+    'Nhà thờ Đức Bà': 26,
+    'Nhà thờ Giáo sứ Tân Định': 27,
+    'Nhà thờ Lớn Hà Nội': 28,
+    'Quảng trường Lâm Viên': 29,
+    'Tháp bà Ponagar': 30,
+    'Ủy ban Nhân dân Thành phố Hồ Chí Minh': 31
 }

@@ -1,1 +1,5 @@
 /pretrained/*
+/exports
+/cache
+/assets
+/pandasai.log

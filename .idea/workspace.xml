@@ -5,23 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b2020bac-6ce4-41a9-9dce-847e294fd48b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/assets/demo.webm" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images_test/img_0_161.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images_test/img_19_130.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images_test/img_5_244.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images_test/img_6_130.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/models/Fine_tuning.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/models/Machine_learning.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pretrained/MB_Model.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pretrained/VGG16_Model.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pretrained/model_lr.pkl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pretrained/model_svm_poly.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data_analysis/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/helpers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images_test/img_0_161.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/images_test/image/img_0_161.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images_test/img_19_130.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/images_test/image/img_19_130.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images_test/img_5_244.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/images_test/image/img_5_244.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images_test/img_6_130.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/images_test/image/img_6_130.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project.py" beforeDir="false" afterPath="$PROJECT_DIR$/project.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/secret_key.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,10 +41,11 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
     "last_opened_file_path": "C:/Users/bmhun/Documents/UIT/Year3/HKII/CS313-Khai thác dữ liệu và ứng dụng/DM_Final Project",
-    "settings.editor.selected.configurable": "configurable.group.appearance"
+    "settings.editor.selected.configurable": "terminal"
   },
   "keyToStringList": {
     "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
@@ -61,6 +55,9 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\bmhun\Documents\UIT\Year3\HKII\CS313-Khai thác dữ liệu và ứng dụng\DM_Final Project\syn_data" />
+      <recent name="C:\Users\bmhun\Documents\UIT\Year3\HKII\CS313-Khai thác dữ liệu và ứng dụng\DM_Final Project\images_test\image" />
+      <recent name="C:\Users\bmhun\Documents\UIT\Year3\HKII\CS313-Khai thác dữ liệu và ứng dụng\DM_Final Project\Data_analysis" />
       <recent name="C:\Users\bmhun\Documents\UIT\Year3\HKII\CS313-Khai thác dữ liệu và ứng dụng\DM_Final Project\pretrained" />
     </key>
   </component>
