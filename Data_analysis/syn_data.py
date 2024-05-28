@@ -2,6 +2,9 @@ import pandas as pd
 import numpy as np
 import random
 
+random_seed = 42
+random.seed(random_seed)
+np.random.seed(random_seed)
 def syn_0():
     # Danh sách các ngày lễ lớn
     holidays = [
@@ -31,7 +34,7 @@ def syn_0():
 
     # Các nhóm tuổi khác nhau
     age_groups = {
-        'students': (12, 22),  # Học sinh, sinh viên
+        'students': (3, 22),  # Học sinh, sinh viên
         'adults': (23, 60),  # Người trưởng thành
         'seniors': (61, 80)  # Người lớn tuổi
     }
@@ -1550,8 +1553,8 @@ def syn_22():
     df = pd.DataFrame(data, columns=['Id_person', 'Is_foreign', 'Age', 'Date'])
 
     # Lưu dữ liệu vào file CSV
-    df.to_csv('syn_data/syn_23.csv', index=False)
-    print('Created synthetic data 23')
+    df.to_csv('syn_data/syn_22.csv', index=False)
+    print('Created synthetic data 22')
 
 
 def syn_23():
