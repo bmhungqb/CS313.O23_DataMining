@@ -40,15 +40,17 @@ with col2:
         check_des = 0
         check_list = 0
         idx, label = helpers.predict(img, model_option)
+        describe = describe(label)
         st.write(f'Đây là: **{label}**')
+        st.write(describe)
 
         st.subheader(f'Phân tích địa điểm **{label}**')
-        response = analysis(idx)
+        response = analysis(idx, label)
         for res in response:
             st.write('*', res)
         res1 = query_near_place(label)
         for res in res1:
-            st.write('*', res)
+            st.write(res)
 
 
 

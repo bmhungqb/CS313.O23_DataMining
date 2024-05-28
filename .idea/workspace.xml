@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b2020bac-6ce4-41a9-9dce-847e294fd48b" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/CS313.O23_DataMining.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/CS313.O23_DataMining.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data_analysis/syn_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/Data_analysis/syn_data.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Data_analysis/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/Data_analysis/utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

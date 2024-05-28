@@ -49,7 +49,7 @@ label_map = {
     13: 'Chùa Trấn Quốc',
     14: 'Chùa Vĩnh Nghiêm',
     15: 'Dinh Độc lâp',
-    16: 'Hồ con rùa',
+    16: 'Hồ con rùa Sài Gòn',
     17: 'Hoàng thành Thăng Long',
     18: 'Kinh Thành Huế',
     19: 'Landmark81',

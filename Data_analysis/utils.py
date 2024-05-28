@@ -152,6 +152,3 @@ def analysis(place, name):
     response_visit = model.generate_content(f"Return result translated {response_visit} in vietnamese")
     response_age = model.generate_content(f"Return result translated {response_age} in vietnamese")
     return [response_visit.text, response_age.text]
-
-# if __name__ == "__main__":
-#     data_process(f'syn_data/syn_1.csv')
