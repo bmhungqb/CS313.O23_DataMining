@@ -1,18 +1,20 @@
 import pandas as pd
-from pandasai import Agent, SmartDataframe
 import google.generativeai as genai
-import os
 from secret_key import google_api_key, pandasai_api_key
-from helpers import label_index
+from pandasai import Agent, SmartDataframe
+from pandasai.llm import OpenAI, GoogleGemini
+import os
 
 genai.configure(api_key=google_api_key)
 os.environ["PANDASAI_API_KEY"] = pandasai_api_key
 model = genai.GenerativeModel('gemini-1.0-pro-latest')
+llm = GoogleGemini(api_key=google_api_key)
+
 def data_process(url):
     # Read the CSV file and set the index
     data = pd.read_csv(url, index_col=0)
-    data['date'] = pd.to_datetime(data['date'])
-    data['month'] = data['date'].dt.month
+    data['Date'] = pd.to_datetime(data['Date'])
+    data['month'] = data['Date'].dt.month
 
     month_map = {1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6: 'June',
                  7: 'July', 8: 'August', 9: 'September', 10: 'October', 11: 'November', 12: 'December'}
@@ -28,7 +30,7 @@ def data_process(url):
     data_visit['month'] = data_visit.index.map(month_map)
     # Iterate over each row in the DataFrame
     for idx, row in data.iterrows():
-        age = row["age"]
+        age = row["Age"]
         month_index = row['month']
 
         # Categorize based on age
@@ -40,7 +42,7 @@ def data_process(url):
             old_age += 1
 
         # Count foreign and domestic visits
-        if row['is_foreign']:
+        if row['Is_foreign']:
             data_visit.loc[month_index, 'Foreign'] += 1
         else:
             data_visit.loc[month_index, 'Domestic'] += 1
@@ -116,9 +118,19 @@ def plot_data(data_visit, data_age, place):
 
     # Display the plot in Streamlit
     st.pyplot(fig)
+
+def query_near_place(place):
+    data = pd.read_csv('Data_analysis/dataset.csv', index_col=0)
+    agent = SmartDataframe(data, config={"llm": llm, 'verbose': True, 'conversational': False, "seed": 123},
+                           description="This dataset contains records of travel destinations, along with information about nearby hotels and restaurants.")
+    hotels = agent.chat(
+        f"Khách sạn nào gần địa điểm du lịch '{place}', nếu có hãy trả lời 'Các khách sạn gần đó là:' ?")
+    restaurants = agent.chat(
+        f"Nhà hàng nào gần địa điểm du lịch '{place}', nếu có hãy trả lời 'Các nhà hàng gần đó là:' ?")
+    return hotels, restaurants
 def analysis(place):
     # data_age, data_visit = data_process(f'syn_data/{label_index[place]}_visitors.csv')
-    data_age, data_visit = data_process(f'syn_data/23_visitors.csv')
+    data_age, data_visit = data_process(f'syn_data/syn_{place}.csv')
     plot_data(data_visit, data_age, place)
     agent_visit = SmartDataframe(data_visit, name="Visitor Data",
                                  description="This dataset contains monthly records of the number of foreign, domestic, and total visitors to a specific location."
@@ -132,3 +144,6 @@ def analysis(place):
     response_visit = model.generate_content(f"Return result translate {response_visit} in vietnamese")
     response_age = model.generate_content(f"Return result translate {response_age} in vietnamese")
     return [response_visit.text, response_age.text]
+
+# if __name__ == "__main__":
+#     data_process(f'syn_data/syn_1.csv')

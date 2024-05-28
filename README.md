@@ -30,18 +30,19 @@
 ## Project
 <a name="project"></a>
 # IMAGE CLASSIFICATION FOR TOURIST DESTINATION IN VIET NAM
-## Code
+## Run project
+- You should download weight of model file. After that, you add each model file to **models** folder. 
+- **Download pre-trained models here !!! [Pre-trained Models](https://www.kaggle.com/models/hngbimnh/cs313_weights)**
+
 > conda create --name datamining python=3.9
 
 > conda activate datamining
 
 > pip install -r requirements.txt
+
+> python Data_analysis/syn_data.py
  
 > streamlit run project.py
 
-## Run project
-- You should download weight of model file. After that, you add each model file to **pretrained** folder. 
-- **Download pre-trained models here !!! [Pre-trained Models](https://drive.google.com/drive/folders/1GJdh2ECYUcqNWYdKMLDfyDIbioH4S0Po?usp=sharing)**
-- **Run Streamlit:** streamlit run project.py
+
 ## **DEMO**
-https://drive.google.com/file/d/1e4OUdECjTaq5dUiHacStlWXEshdanPrF/view?usp=sharing

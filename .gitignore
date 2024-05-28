@@ -1,5 +1,8 @@
-/pretrained/*
+# caffe/pytorch model files
+*.pth
 /exports
 /cache
 /assets
 /pandasai.log
+/syn_data
+/models/*.pth
