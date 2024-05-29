@@ -4,20 +4,42 @@ from secret_key import google_api_key, pandasai_api_key
 from pandasai import Agent, SmartDataframe
 from pandasai.llm import OpenAI, GoogleGemini
 import os
-
+import unicodedata
 genai.configure(api_key=google_api_key)
 os.environ["PANDASAI_API_KEY"] = pandasai_api_key
 model = genai.GenerativeModel('gemini-pro')
 llm = GoogleGemini(api_key=google_api_key)
+def convert_string(input_str):
+    if isinstance(input_str, str):
+        # Remove diacritical marks
+        nfkd_form = unicodedata.normalize('NFKD', input_str)
+        only_ascii = nfkd_form.encode('ASCII', 'ignore').decode('utf-8')
 
+        # Replace spaces with underscores and convert to lowercase
+        converted_str = only_ascii.replace(' ', '_').lower()
+
+        return converted_str
+    return input_str
 def data_process(url):
     # Read the CSV file and set the index
     data = pd.read_csv(url, index_col=0)
     data['Date'] = pd.to_datetime(data['Date'])
     data['month'] = data['Date'].dt.month
 
-    month_map = {1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6: 'June',
-                 7: 'July', 8: 'August', 9: 'September', 10: 'October', 11: 'November', 12: 'December'}
+    month_map = {
+        1: 'Tháng Một',
+        2: 'Tháng Hai',
+        3: 'Tháng Ba',
+        4: 'Tháng Tư',
+        5: 'Tháng Năm',
+        6: 'Tháng Sáu',
+        7: 'Tháng Bảy',
+        8: 'Tháng Tám',
+        9: 'Tháng Chín',
+        10: 'Tháng Mười',
+        11: 'Tháng Mười Một',
+        12: 'Tháng Mười Hai'
+    }
 
     # Initialize counters for each age group
     teen_age = 0
@@ -58,7 +80,7 @@ def data_process(url):
 
     # Create data_age DataFrame
     data_age = pd.DataFrame({
-        "age_group": ["teen_age", "middle_age", "old_age"],
+        "age_group": ['người trẻ', 'người trưởng thành','người lớn tuổi'],
         "count": [teen_age, middle_age, old_age]
     })
     return data_age, data_visit
@@ -127,12 +149,14 @@ def query_near_place(place):
         f"Khách sạn nào gần địa điểm du lịch '{place}', nếu có hãy trả lời 'Các khách sạn gần đó là:' ?")
     restaurants = agent.chat(
         f"Nhà hàng nào gần địa điểm du lịch '{place}', nếu có hãy trả lời 'Các nhà hàng gần đó là:' ?")
-    hotels = model.generate_content(f'Hãy chỉnh sửa hình thức câu trả lời này: {hotels} ')
+    hotels = model.generate_content(
+        f'Tôi đặt câu hỏi "Các khách sạn nào gần địa điểm du lịch {place} ?", đây là câu trả lời {hotels} . Hãy chỉnh sửa hình thức câu trả lời ')
     hotels = hotels.text.replace('•', '  *')
-    restaurants = model.generate_content(f'Hãy chỉnh sửa hình thức câu trả lời này: {restaurants} ')
+
+    restaurants = model.generate_content(
+        f'Tôi đặt câu hỏi "Các nhà hàng nào gần địa điểm du lịch {place} ?", đây là câu trả lời {restaurants} . Hãy chỉnh sửa hình thức câu trả lời ')
     restaurants = restaurants.text.replace('•', '  *')
     return hotels, restaurants
-
 def describe(place):
     result = model.generate_content(f"Hãy viết một đoạn văn ngắn, khoảng 100 từ, mô tả về {place} bằng tiếng Việt")
     result = result.text.replace('•', '  *')
